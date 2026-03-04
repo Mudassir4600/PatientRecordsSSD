@@ -17,11 +17,13 @@ def create_app():
     from routes.admin import admin_bp
     from routes.clinician import clinician_bp
     from routes.patient import patient_bp
+    from routes.records import records_bp
 
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(admin_bp, url_prefix='/admin')
     app.register_blueprint(clinician_bp, url_prefix='/clinician')
     app.register_blueprint(patient_bp, url_prefix='/patient')
+    app.register_blueprint(records_bp, url_prefix='/records')
 
     # Create all SQLite tables if they don't exist yet
     with app.app_context():

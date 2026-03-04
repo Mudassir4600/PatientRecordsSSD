@@ -1,3 +1,4 @@
+from flask import redirect, url_for
 from flask import Blueprint, render_template
 from flask_login import login_required
 
@@ -11,7 +12,7 @@ def dashboard():
 @admin_bp.route('/manage-users')
 @login_required
 def manage_users():
-    return render_template('admin/dashboard.html')
+    return redirect(url_for('records.list_records'))
 
 @admin_bp.route('/audit-logs')
 @login_required

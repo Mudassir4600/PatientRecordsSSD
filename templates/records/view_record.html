@@ -1,0 +1,66 @@
+{% extends 'shared/base.html' %}
+{% block title %}View Record{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <a href="{{ url_for('records.list_records') }}" class="btn btn-outline-secondary me-3">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <h3 class="fw-bold mb-0"><i class="fas fa-file-medical me-2 text-primary"></i>Patient Record</h3>
+    {% if current_user.role in ['admin', 'clinician'] %}
+    <a href="{{ url_for('records.edit_record', record_id=record._id) }}"
+       class="btn btn-warning ms-auto">
+        <i class="fas fa-edit me-2"></i>Edit Record
+    </a>
+    {% endif %}
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card p-4 h-100">
+            <h5 class="fw-bold mb-3 text-primary"><i class="fas fa-user me-2"></i>Patient Information</h5>
+            <table class="table table-borderless mb-0">
+                <tr><td class="fw-semibold text-muted">Full Name</td><td>{{ record.full_name }}</td></tr>
+                <tr><td class="fw-semibold text-muted">Age</td><td>{{ record.age }}</td></tr>
+                <tr><td class="fw-semibold text-muted">Sex</td><td>{{ record.sex }}</td></tr>
+                <tr>
+                    <td class="fw-semibold text-muted">Status</td>
+                    <td>
+                        <span class="badge bg-{{ 'success' if record.status == 'active' else 'secondary' }}">
+                            {{ record.status }}
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+        <div class="card p-4 h-100">
+            <h5 class="fw-bold mb-3 text-primary"><i class="fas fa-heartbeat me-2"></i>Clinical Indicators</h5>
+            <table class="table table-borderless mb-0">
+                <tr><td class="fw-semibold text-muted">Blood Pressure</td><td>{{ record.blood_pressure or '—' }} mmHg</td></tr>
+                <tr><td class="fw-semibold text-muted">Cholesterol</td><td>{{ record.cholesterol or '—' }} mg/dl</td></tr>
+                <tr><td class="fw-semibold text-muted">Fasting Blood Sugar</td><td>{{ record.fasting_blood_sugar or '—' }}</td></tr>
+                <tr><td class="fw-semibold text-muted">Resting ECG</td><td>{{ record.resting_ecg or '—' }}</td></tr>
+                <tr><td class="fw-semibold text-muted">Exercise Angina</td><td>{{ record.exercise_angina or '—' }}</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card p-4 mb-4">
+    <h5 class="fw-bold mb-3 text-primary"><i class="fas fa-notes-medical me-2"></i>Clinical Notes</h5>
+    <p class="mb-0">{{ record.notes or 'No clinical notes recorded.' }}</p>
+</div>
+
+<div class="card p-4">
+    <h5 class="fw-bold mb-3 text-primary"><i class="fas fa-history me-2"></i>Record Audit</h5>
+    <table class="table table-borderless mb-0">
+        <tr><td class="fw-semibold text-muted">Created By</td><td>{{ record.created_by or '—' }}</td></tr>
+        <tr><td class="fw-semibold text-muted">Created At</td><td>{{ record.created_at.strftime('%d %b %Y %H:%M') if record.created_at else '—' }}</td></tr>
+        <tr><td class="fw-semibold text-muted">Last Updated By</td><td>{{ record.updated_by or '—' }}</td></tr>
+        <tr><td class="fw-semibold text-muted">Last Updated</td><td>{{ record.updated_at.strftime('%d %b %Y %H:%M') if record.updated_at else '—' }}</td></tr>
+    </table>
+</div>
+{% endblock %}

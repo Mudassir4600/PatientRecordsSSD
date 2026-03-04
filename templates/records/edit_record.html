@@ -1,0 +1,76 @@
+{% extends 'shared/base.html' %}
+{% block title %}Edit Record{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <a href="{{ url_for('records.view_record', record_id=record._id) }}" class="btn btn-outline-secondary me-3">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <h3 class="fw-bold mb-0"><i class="fas fa-edit me-2 text-primary"></i>Edit Patient Record</h3>
+</div>
+
+<div class="card p-4">
+    <div class="alert alert-info mb-4">
+        <i class="fas fa-info-circle me-2"></i>
+        Editing record for <strong>{{ record.full_name }}</strong>.
+        All changes are logged for audit purposes.
+    </div>
+
+    <form method="POST" action="{{ url_for('records.edit_record', record_id=record._id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Blood Pressure (mmHg)</label>
+                <input type="text" name="blood_pressure" class="form-control"
+                       value="{{ record.blood_pressure or '' }}">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Cholesterol (mg/dl)</label>
+                <input type="text" name="cholesterol" class="form-control"
+                       value="{{ record.cholesterol or '' }}">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label fw-semibold">Fasting Blood Sugar &gt;120 mg/dl</label>
+                <select name="fasting_blood_sugar" class="form-select">
+                    <option value="">Unknown</option>
+                    <option value="Yes" {{ 'selected' if record.fasting_blood_sugar == 'Yes' }}>Yes</option>
+                    <option value="No" {{ 'selected' if record.fasting_blood_sugar == 'No' }}>No</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label fw-semibold">Resting ECG</label>
+                <select name="resting_ecg" class="form-select">
+                    <option value="">Unknown</option>
+                    <option value="Normal" {{ 'selected' if record.resting_ecg == 'Normal' }}>Normal</option>
+                    <option value="Abnormal" {{ 'selected' if record.resting_ecg == 'Abnormal' }}>Abnormal</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label fw-semibold">Exercise-Induced Angina</label>
+                <select name="exercise_angina" class="form-select">
+                    <option value="">Unknown</option>
+                    <option value="Yes" {{ 'selected' if record.exercise_angina == 'Yes' }}>Yes</option>
+                    <option value="No" {{ 'selected' if record.exercise_angina == 'No' }}>No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label fw-semibold">Clinical Notes</label>
+            <textarea name="notes" class="form-control" rows="4">{{ record.notes or '' }}</textarea>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="fas fa-save me-2"></i>Save Changes
+            </button>
+            <a href="{{ url_for('records.view_record', record_id=record._id) }}"
+               class="btn btn-outline-secondary px-4">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

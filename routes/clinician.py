@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for
 from flask_login import login_required
 
 clinician_bp = Blueprint('clinician', __name__)
@@ -15,5 +15,5 @@ def patients():
 
 @clinician_bp.route('/appointments')
 @login_required
-def appointments():
-    return render_template('clinician/dashboard.html')
+def clinician_appointments():
+    return redirect(url_for('appointments.list_appointments'))

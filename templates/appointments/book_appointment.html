@@ -1,0 +1,73 @@
+{% extends 'shared/base.html' %}
+{% block title %}Book Appointment{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <a href="{{ url_for('appointments.list_appointments') }}"
+       class="btn btn-outline-secondary me-3">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+    <h3 class="fw-bold mb-0">
+        <i class="fas fa-calendar-plus me-2 text-primary"></i>Book Appointment
+    </h3>
+</div>
+
+<div class="card p-4">
+    <form method="POST" action="{{ url_for('appointments.book_appointment') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">
+                    Select Clinician <span class="text-danger">*</span>
+                </label>
+                {% if clinicians %}
+                <select name="clinician_email" class="form-select" required>
+                    <option value="">Choose a clinician...</option>
+                    {% for clinician in clinicians %}
+                    <option value="{{ clinician.email }}">
+                        {{ clinician.full_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% else %}
+                <div class="alert alert-warning">
+                    No clinicians are available at this time.
+                    Please contact the admin.
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-3 mb-3">
+                <label class="form-label fw-semibold">
+                    Date <span class="text-danger">*</span>
+                </label>
+                <input type="date" name="date" class="form-control" required
+                       min="{{ now }}">
+            </div>
+            <div class="col-md-3 mb-3">
+                <label class="form-label fw-semibold">
+                    Time <span class="text-danger">*</span>
+                </label>
+                <input type="time" name="time" class="form-control" required>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label fw-semibold">
+                Reason for Visit <span class="text-danger">*</span>
+            </label>
+            <textarea name="reason" class="form-control" rows="3"
+                      placeholder="Briefly describe the reason for your appointment..."
+                      required></textarea>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="fas fa-calendar-check me-2"></i>Confirm Booking
+            </button>
+            <a href="{{ url_for('appointments.list_appointments') }}"
+               class="btn btn-outline-secondary px-4">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -73,11 +73,11 @@
                     <a class="nav-link" href="{{ url_for('clinician.dashboard') }}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a class="nav-link" href="{{ url_for('records.list_records') }}"><i class="fas fa-file-medical me-2"></i>Patient Records</a>
                     <a class="nav-link" href="{{ url_for('clinician.patients') }}"><i class="fas fa-users me-2"></i>My Patients</a>
-                    <a class="nav-link" href="{{ url_for('clinician.appointments') }}"><i class="fas fa-calendar me-2"></i>Appointments</a>
+                    <a class="nav-link" href="{{ url_for('clinician.clinician_appointments') }}"><i class="fas fa-calendar me-2"></i>Appointments</a>
                 {% else %}
                     <a class="nav-link" href="{{ url_for('patient.dashboard') }}"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a class="nav-link" href="{{ url_for('patient.my_records') }}"><i class="fas fa-file-medical me-2"></i>My Records</a>
-                    <a class="nav-link" href="{{ url_for('patient.appointments') }}"><i class="fas fa-calendar me-2"></i>Appointments</a>
+                    <a class="nav-link" href="{{ url_for('appointments.list_appointments') }}"><i class="fas fa-calendar me-2"></i>Appointments</a>
                     <a class="nav-link" href="{{ url_for('patient.prescriptions') }}"><i class="fas fa-pills me-2"></i>Prescriptions</a>
                 {% endif %}
             </nav>

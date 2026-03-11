@@ -1,3 +1,4 @@
+import bleach
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from extensions import get_mongo_db
@@ -45,7 +46,8 @@ def add_record():
 
     if request.method == 'POST':
         # Collect and sanitise all form fields
-        full_name = request.form.get('full_name', '').strip()
+        # Sanitise inputs to prevent XSS attacks (STRIDE: Tampering)
+        full_name = bleach.clean(request.form.get('full_name', '').strip())
         age = request.form.get('age', '').strip()
         sex = request.form.get('sex', '').strip()
         blood_pressure = request.form.get('blood_pressure', '').strip()
@@ -53,7 +55,8 @@ def add_record():
         fasting_blood_sugar = request.form.get('fasting_blood_sugar', '').strip()
         resting_ecg = request.form.get('resting_ecg', '').strip()
         exercise_angina = request.form.get('exercise_angina', '').strip()
-        notes = request.form.get('notes', '').strip()
+        # Sanitise inputs to prevent XSS attacks (STRIDE: Tampering)
+        notes = bleach.clean(request.form.get('notes', '').strip())
 
         # Basic validation - required fields must not be empty
         if not full_name or not age or not sex:
@@ -144,13 +147,17 @@ def edit_record(record_id):
 
     if request.method == 'POST':
         # Build update document with sanitised inputs
+        # Sanitise notes input to prevent XSS attacks
+        notes = bleach.clean(request.form.get('notes', '').strip())
+
+        # Build update document with sanitised inputs
         updated_data = {
             'blood_pressure': request.form.get('blood_pressure', '').strip(),
             'cholesterol': request.form.get('cholesterol', '').strip(),
             'fasting_blood_sugar': request.form.get('fasting_blood_sugar', '').strip(),
             'resting_ecg': request.form.get('resting_ecg', '').strip(),
             'exercise_angina': request.form.get('exercise_angina', '').strip(),
-            'notes': request.form.get('notes', '').strip(),
+            'notes': notes,
             'updated_at': datetime.utcnow(),
             'updated_by': current_user.email
         }

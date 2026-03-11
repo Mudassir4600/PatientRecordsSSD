@@ -1,3 +1,4 @@
+from extensions import db, bcrypt, limiter
 from flask import Blueprint, render_template, redirect, url_for, flash, request, session
 from flask_login import login_user, logout_user, login_required, current_user
 from extensions import db, bcrypt
@@ -64,6 +65,7 @@ def register():
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")  # Rate limit login attempts to prevent brute force
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('auth.dashboard'))

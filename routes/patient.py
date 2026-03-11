@@ -21,7 +21,7 @@ def patient_appointments():
 @patient_bp.route('/prescriptions')
 @login_required
 def prescriptions():
-    return render_template('patient/dashboard.html')
+    return redirect(url_for('prescriptions.list_prescriptions'))
 
 @patient_bp.route('/appointments')
 @login_required

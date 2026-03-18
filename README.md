@@ -198,6 +198,44 @@ brainstorming, planning, feedback.
 
 ---
 
+## References
+
+Anderson, R. (2020). *Security engineering: A guide to building 
+dependable distributed systems* (3rd ed.). Wiley.
+
+Stallings, W., & Brown, L. (2018). *Computer security: Principles 
+and practice* (4th ed.). Pearson.
+
+Stuttard, D., & Pinto, M. (2011). *The web application hacker's 
+handbook: Finding and exploiting security flaws* (2nd ed.). Wiley.
+
+Information Commissioner's Office. (2023). *Guide to the UK General 
+Data Protection Regulation (UK GDPR)*. ICO. 
+https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/
+
+NHS England. (2021). *Data security standards*. NHS Digital. 
+https://digital.nhs.gov.uk
+
+OWASP Foundation. (2021). *OWASP Top Ten*. 
+https://owasp.org/www-project-top-ten/
+
+Fieldman, A. (2024). *Cross-site request forgery (CSRF)*. OWASP Foundation. 
+https://owasp.org/www-community/attacks/csrf
+
+Pallets Projects. (2024). *Flask documentation (3.0.x)*. 
+https://flask.palletsprojects.com
+
+MongoDB, Inc. (2024). *MongoDB documentation*. 
+https://www.mongodb.com/docs/
+
+Python Cryptographic Authority. (2024). *Cryptography — Fernet 
+symmetric encryption*. https://cryptography.io/en/latest/fernet/
+
+Flask-Limiter Contributors. (2024). *Flask-Limiter documentation*. 
+https://flask-limiter.readthedocs.io/en/stable/
+
+---
+
 ## GitHub Repository
 
 [https://github.com/Mudassir4600/PatientRecordsSSD](https://github.com/Mudassir4600/PatientRecordsSSD)

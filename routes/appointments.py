@@ -8,7 +8,7 @@ from bson import ObjectId
 appointments_bp = Blueprint('appointments', __name__)
 
 
-# Helper to record every appointment action in the audit trail
+# Helps to record every appointment action in the audit trail
 def log_action(action, target=None):
     entry = AuditLog(
         user_id=current_user.id,
@@ -21,7 +21,7 @@ def log_action(action, target=None):
     db.session.commit()
 
 
-# List appointments — filtered by role
+# List appointments, filtered by role
 @appointments_bp.route('/')
 @login_required
 def list_appointments():
@@ -47,7 +47,7 @@ def list_appointments():
                            appointments=appointments)
 
 
-# Book a new appointment — patients and admins
+# Booking a new appointment for patients and admins
 @appointments_bp.route('/book', methods=['GET', 'POST'])
 @login_required
 def book_appointment():
@@ -106,7 +106,7 @@ def book_appointment():
                        now=datetime.utcnow().strftime('%Y-%m-%d'))
 
 
-# View a single appointment
+# Viewing a single appointment
 @appointments_bp.route('/view/<appointment_id>')
 @login_required
 def view_appointment(appointment_id):
@@ -135,7 +135,7 @@ def view_appointment(appointment_id):
                            appointment=appointment)
 
 
-# Update appointment status — clinician and admin only
+# Update appointment status for clinician and admin only
 @appointments_bp.route('/update-status/<appointment_id>', methods=['POST'])
 @login_required
 def update_status(appointment_id):
@@ -173,7 +173,7 @@ def update_status(appointment_id):
                             appointment_id=appointment_id))
 
 
-# Cancel appointment — patient can cancel their own
+# Cancelling appointment which means patient can cancel their own appointments
 @appointments_bp.route('/cancel/<appointment_id>')
 @login_required
 def cancel_appointment(appointment_id):
@@ -187,8 +187,7 @@ def cancel_appointment(appointment_id):
         flash('Invalid appointment.', 'danger')
         return redirect(url_for('appointments.list_appointments'))
 
-    # Only the patient who booked it or admin can cancel
-    if current_user.role == 'patient':
+    # Only the patient booking it or admin can cancel appointment    if current_user.role == 'patient':
         if appointment.get('patient_email') != current_user.email:
             flash('You can only cancel your own appointments.', 'danger')
             return redirect(url_for('appointments.list_appointments'))

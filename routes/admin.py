@@ -7,7 +7,7 @@ from datetime import datetime
 admin_bp = Blueprint('admin', __name__)
 
 
-# Restrict all admin routes to admin role only
+# Restricting all admin routes to admin role only
 def admin_required(f):
     from functools import wraps
     @wraps(f)
@@ -23,7 +23,7 @@ def admin_required(f):
 @login_required
 @admin_required
 def dashboard():
-    # Gather summary stats for the dashboard
+    # Gathering summary stats/data for the dashboard
     total_users = User.query.count()
     total_patients = User.query.filter_by(role='patient').count()
     total_clinicians = User.query.filter_by(role='clinician').count()
@@ -50,7 +50,7 @@ def manage_users():
 def toggle_user(user_id):
     user = User.query.get_or_404(user_id)
 
-    # Prevent admin from deactivating their own account
+    # To Prevent admin from deactivating their own account
     if user.id == current_user.id:
         flash('You cannot deactivate your own account.', 'danger')
         return redirect(url_for('admin.manage_users'))
@@ -104,7 +104,7 @@ def delete_user(user_id):
 @login_required
 @admin_required
 def audit_logs():
-    # Show all audit logs, most recent first
+    # Showing all audit logs, most recent/latest first
     logs = AuditLog.query.order_by(AuditLog.timestamp.desc()).all()
 
     # Get user emails for display

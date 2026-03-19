@@ -193,9 +193,16 @@ After setup, register the following accounts to test all roles:
 
 ## AI Usage Declaration
 
-This assignment used generative AI in the following ways:
-brainstorming, planning, feedback.
+This assignment used generative AI (Claude by Anthropic) in the following 
+ways: brainstorming, research, planning, feedback, and editing.
 
+Full details of AI usage, including a detailed log of how AI was used 
+throughout the project, are documented in [AI_DISCLOSURE.md](AI_DISCLOSURE.md).
+
+## Future Work
+
+Planned enhancements for production deployment are documented in 
+[FUTURE_WORK.md](FUTURE_WORK.md).
 ---
 
 ## References

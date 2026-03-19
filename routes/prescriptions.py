@@ -8,7 +8,7 @@ from bson import ObjectId
 prescriptions_bp = Blueprint('prescriptions', __name__)
 
 
-# Helper to record every prescription action in the audit trail
+# Used as helper to record each prescription action in the audit trail
 def log_action(action, target=None):
     entry = AuditLog(
         user_id=current_user.id,
@@ -21,24 +21,24 @@ def log_action(action, target=None):
     db.session.commit()
 
 
-# List prescriptions filtered by role
+# prescriptions list, filtered by role
 @prescriptions_bp.route('/')
 @login_required
 def list_prescriptions():
     mongo = get_mongo_db()
 
     if current_user.role == 'admin':
-        # Admin sees all prescriptions
+        # Admin has access to all prescriptions
         prescriptions = list(mongo.prescriptions.find().sort('issued_date', -1))
 
     elif current_user.role == 'clinician':
-        # Clinician sees only prescriptions they issued
+        # Clinician can only see only prescriptions they have issued
         prescriptions = list(mongo.prescriptions.find(
             {'clinician_email': current_user.email}
         ).sort('issued_date', -1))
 
     else:
-        # Patient sees only their own prescriptions
+        # Patient can only see only their own prescriptions
         prescriptions = list(mongo.prescriptions.find(
             {'patient_email': current_user.email}
         ).sort('issued_date', -1))
@@ -47,7 +47,7 @@ def list_prescriptions():
                            prescriptions=prescriptions)
 
 
-# Issue a new prescription — clinicians only
+# Issuing a new prescription, aythorized only for clinicians
 @prescriptions_bp.route('/add', methods=['GET', 'POST'])
 @login_required
 def add_prescription():
@@ -66,7 +66,7 @@ def add_prescription():
         duration = request.form.get('duration', '').strip()
         notes = request.form.get('notes', '').strip()
 
-        # Validate required fields
+        # Required fields being validated
         if not patient_email or not medication or not dosage or not frequency:
             flash('Patient, medication, dosage and frequency are required.', 'danger')
             return redirect(url_for('prescriptions.add_prescription'))
@@ -75,7 +75,7 @@ def add_prescription():
         patient = User.query.filter_by(email=patient_email).first()
         patient_name = patient.full_name if patient else patient_email
 
-        # Build prescription document for MongoDB
+        # prescription document built for MongoDB
         prescription = {
             'patient_email': patient_email,
             'patient_name': patient_name,
@@ -121,7 +121,7 @@ def view_prescription(prescription_id):
         flash('Prescription not found.', 'danger')
         return redirect(url_for('prescriptions.list_prescriptions'))
 
-    # Patients can only view their own prescriptions
+    # Patients can only see n view their own prescriptions
     if current_user.role == 'patient':
         if prescription.get('patient_email') != current_user.email:
             flash('Access denied.', 'danger')
@@ -132,7 +132,7 @@ def view_prescription(prescription_id):
                            prescription=prescription)
 
 
-# Mark prescription as inactive — clinician or admin only
+# clinicians or admins only can mark prescriptions as inactive
 @prescriptions_bp.route('/deactivate/<prescription_id>')
 @login_required
 def deactivate_prescription(prescription_id):

@@ -10,7 +10,7 @@ from extensions import db
 from models import User
 
 
-# ─── Test Configuration ────────────────────────────────────────────────────────
+#Test Configuration
 
 @pytest.fixture
 def app():
@@ -84,7 +84,7 @@ def clinician_user(app):
         return user
 
 
-# ─── Authentication Tests ───────────────────────────────────────────────────────
+#Authentication Tests
 
 class TestAuthentication:
     """Tests for user registration and login functionality."""
@@ -168,7 +168,7 @@ class TestAuthentication:
         assert b'already exists' in response.data
 
 
-# ─── Role-Based Access Control Tests ───────────────────────────────────────────
+#Role-Based Access Control Tests
 
 class TestRoleBasedAccess:
     """Tests to verify that role-based access control is enforced correctly."""
@@ -215,7 +215,7 @@ class TestRoleBasedAccess:
         assert b'Admin Dashboard' not in response.data
 
 
-# ─── Security Tests ─────────────────────────────────────────────────────────────
+#Security Tests
 
 class TestSecurity:
     """Tests to verify security controls are active and working."""
@@ -262,7 +262,7 @@ class TestSecurity:
         assert response.status_code == 302
 
 
-# ─── Data Validation Tests ──────────────────────────────────────────────────────
+#Data Validation Tests
 
 class TestDataValidation:
     """Tests to verify input validation is working correctly."""
@@ -310,7 +310,7 @@ class TestDataValidation:
         }, follow_redirects=True)
         assert b'cannot be in the past' in response.data
 
-        # ─── Integration Tests ──────────────────────────────────────────────────────────
+        #Integration Tests
 
 class TestIntegration:
     """
@@ -502,7 +502,7 @@ class TestIntegration:
         assert b'Patient Dashboard' in response.data
 
 
-# ─── End-to-End Tests ───────────────────────────────────────────────────────────
+#End-to-End Tests
 
 class TestEndToEnd:
     """

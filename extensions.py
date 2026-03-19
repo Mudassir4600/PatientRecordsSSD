@@ -11,10 +11,10 @@ import os
 
 load_dotenv()
 
-# SQLite database instance (for users/auth)
+# SQLite database instance for users/auth
 db = SQLAlchemy()
 
-# Login session manager
+# for managing login sessions
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.login_message_category = 'info'
@@ -25,7 +25,7 @@ bcrypt = Bcrypt()
 # CSRF protection on all forms
 csrf = CSRFProtect()
 
-# Rate limiter — prevents brute force attacks (STRIDE: Spoofing)
+# Limits number of attempts to prevent brute force attacks
 limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["200 per day", "50 per hour"]
@@ -64,7 +64,7 @@ def decrypt_field(value: str) -> str:
         return value
 
 
-# Tells Flask-Login how to reload a user from the session
+# Tells Flask Login how to reload a user from the session
 @login_manager.user_loader
 def load_user(user_id):
     from models import User

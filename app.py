@@ -7,14 +7,14 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    # Initialise all extensions with the app
+    # set up extensions
     db.init_app(app)
     login_manager.init_app(app)
     bcrypt.init_app(app)
     csrf.init_app(app)
     limiter.init_app(app)
 
-    # Register blueprints for each section of the app
+    # add app routes (blueprints)
     from routes.auth import auth_bp
     from routes.admin import admin_bp
     from routes.clinician import clinician_bp
@@ -31,24 +31,24 @@ def create_app():
     app.register_blueprint(appointments_bp, url_prefix='/appointments')
     app.register_blueprint(prescriptions_bp, url_prefix='/prescriptions')
 
-    # Homepage redirect to login
+    # send user to login page by default
     @app.route('/')
     def index():
         return redirect(url_for('auth.login'))
 
-    # Add security headers to every response (STRIDE: Information Disclosure)
+    # add some basic security headers
     @app.after_request
     def add_security_headers(response):
-        # Prevent clickjacking attacks
+        # stop clickjacking attacks
         response.headers['X-Frame-Options'] = 'DENY'
-        # Prevent MIME type sniffing
+        # MIME type sniffing, stop browser guessing file types
         response.headers['X-Content-Type-Options'] = 'nosniff'
-        # Force HTTPS in production
+        #  use https in production
         response.headers['Strict-Transport-Security'] = \
             'max-age=31536000; includeSubDomains'
         # Control what information is sent in referrer
         response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
-        # Content Security Policy — restrict resource loading
+        # restrict what resources can load
         response.headers['Content-Security-Policy'] = \
             "default-src 'self'; " \
             "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net " \
@@ -58,7 +58,7 @@ def create_app():
             "font-src 'self' https://cdnjs.cloudflare.com;"
         return response
 
-    # Create all SQLite tables if they don't exist yet
+        
     with app.app_context():
         db.create_all()
 

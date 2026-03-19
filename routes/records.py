@@ -9,7 +9,7 @@ from bson import ObjectId
 records_bp = Blueprint('records', __name__)
 
 
-# Helper to log actions into SQLite audit trail
+# Used as Helper to log actions into SQLite audit trail
 def log_action(action, target=None):
     entry = AuditLog(
         user_id=current_user.id,
@@ -22,7 +22,7 @@ def log_action(action, target=None):
     db.session.commit()
 
 
-# View all patient records - admin and clinician only
+# All patient records can be viewed only by admin and clinician
 @records_bp.route('/')
 @login_required
 def list_records():
@@ -31,12 +31,12 @@ def list_records():
         return redirect(url_for('auth.dashboard'))
 
     mongo = get_mongo_db()
-    # Only show active (non-archived) records
+    # Only show active/non archived records
     records = list(mongo.patient_records.find({'status': {'$ne': 'archived'}}))
     return render_template('records/list_records.html', records=records)
 
 
-# Add a new patient record - admin only
+# Add a new patient record access only to admins
 @records_bp.route('/add', methods=['GET', 'POST'])
 @login_required
 def add_record():
@@ -46,7 +46,7 @@ def add_record():
 
     if request.method == 'POST':
         # Collect and sanitise all form fields
-        # Sanitise inputs to prevent XSS attacks (STRIDE: Tampering)
+        # Sanitise inputs to prevent XSS attacks e.g (STRIDE: Tampering)
         full_name = bleach.clean(request.form.get('full_name', '').strip())
         age = request.form.get('age', '').strip()
         sex = request.form.get('sex', '').strip()
@@ -63,7 +63,7 @@ def add_record():
             flash('Full name, age, and sex are required fields.', 'danger')
             return redirect(url_for('records.add_record'))
 
-        # Validate age is a sensible number
+        # Validating to see if age is a sensible number
         try:
             age = int(age)
             if age < 0 or age > 120:
@@ -125,7 +125,7 @@ def view_record(record_id):
     return render_template('records/view_record.html', record=record)
 
 
-# Edit a patient record - admin and clinician
+# Admin and clinician can aedit a patient record
 @records_bp.route('/edit/<record_id>', methods=['GET', 'POST'])
 @login_required
 def edit_record(record_id):
@@ -150,7 +150,7 @@ def edit_record(record_id):
         # Sanitise notes input to prevent XSS attacks
         notes = bleach.clean(request.form.get('notes', '').strip())
 
-        # Build update document with sanitised inputs
+        # Building updated document with sanitised inputs
         updated_data = {
             'blood_pressure': request.form.get('blood_pressure', '').strip(),
             'cholesterol': request.form.get('cholesterol', '').strip(),
@@ -174,7 +174,7 @@ def edit_record(record_id):
     return render_template('records/edit_record.html', record=record)
 
 
-# Archive a record - admin only (soft delete, data is preserved)
+# Archive a record, admin access only, soft delete i-e data is preserved
 @records_bp.route('/archive/<record_id>')
 @login_required
 def archive_record(record_id):

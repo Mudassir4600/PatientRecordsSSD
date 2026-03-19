@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-#loading environment variables
+#to load environment variables
 load_dotenv()
 
 class Config:

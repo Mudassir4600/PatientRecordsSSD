@@ -5,11 +5,11 @@ from extensions import db, bcrypt
 from models import User, AuditLog
 from datetime import datetime
 
-# Auth blueprint handles login, register, logout
+# Auth blueprint used to handle login, register, logout
 auth_bp = Blueprint('auth', __name__)
 
 
-# Helper function to log important actions for audit trail
+# Helper function is uded to log important actions for audit trail
 def log_action(user_id, action, target=None):
     entry = AuditLog(
         user_id=user_id,
@@ -39,13 +39,13 @@ def register():
             flash('Password must be at least 8 characters.', 'danger')
             return redirect(url_for('auth.register'))
 
-        # Check if email already exists
+        # Used to Check if email already exists or not
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
             flash('An account with that email already exists.', 'danger')
             return redirect(url_for('auth.register'))
 
-        # Hash the password before storing — never store plain text
+        # "never" store plain text, Hash password before storing 
         hashed_pw = bcrypt.generate_password_hash(password).decode('utf-8')
 
         new_user = User(
@@ -65,7 +65,7 @@ def register():
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
-@limiter.limit("5 per minute")  # Rate limit login attempts to prevent brute force
+@limiter.limit("5 per minute")  # limit number of login attempts to prevent brute force
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('auth.dashboard'))
@@ -76,7 +76,7 @@ def login():
 
         user = User.query.filter_by(email=email).first()
 
-        # Verify user exists and password matches
+        # to v erify user already exists and password is matcjhed
         if not user or not bcrypt.check_password_hash(user.password_hash, password):
             flash('Invalid email or password.', 'danger')
             log_action(None, 'FAILED_LOGIN_ATTEMPT', target=email)
@@ -115,7 +115,7 @@ def logout():
 @auth_bp.route('/dashboard')
 @login_required
 def dashboard():
-    # Redirect to role-specific dashboard
+    # Redirect to role based specific dashboard
     if current_user.role == 'admin':
         return redirect(url_for('admin.dashboard'))
     elif current_user.role == 'clinician':

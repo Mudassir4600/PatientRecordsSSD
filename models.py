@@ -2,7 +2,7 @@ from extensions import db
 from flask_login import UserMixin
 from datetime import datetime
 
-# User model stored in SQLite - handles authentication for all roles
+# User model stored in SQLite, handles authentication for all roles
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
@@ -11,7 +11,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
 
-    # Role determines what the user can access: admin, clinician, or patient
+    # Role determines what the user can access i-e admin, clinician, or patient
     role = db.Column(db.String(20), nullable=False, default='patient')
 
     is_active = db.Column(db.Boolean, default=True)
@@ -22,7 +22,7 @@ class User(UserMixin, db.Model):
         return f'<User {self.email} | Role: {self.role}>'
 
 
-# Audit log model - records every sensitive action for compliance
+# Audit log model used to record every sensitive action for compliance
 class AuditLog(db.Model):
     __tablename__ = 'audit_logs'
 

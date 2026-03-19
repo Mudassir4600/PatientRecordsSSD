@@ -28,7 +28,7 @@ csrf = CSRFProtect()
 # Limits number of attempts to prevent brute force attacks
 limiter = Limiter(
     key_func=get_remote_address,
-    default_limits=["200 per day", "50 per hour"]
+    default_limits=[]
 )
 
 # MongoDB client (for patient records)

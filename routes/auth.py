@@ -65,7 +65,7 @@ def register():
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
-@limiter.limit("5 per minute")  # limit number of login attempts to prevent brute force
+@limiter.limit("20 per minute")  # limit number of login attempts to prevent brute force
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('auth.dashboard'))
